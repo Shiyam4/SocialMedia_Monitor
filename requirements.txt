@@ -1,0 +1,9 @@
+Flask
+scikit-learn==1.7.2  # match model training version to avoid unpickle warnings
+pandas
+numpy
+joblib
+nltk
+langdetect
+# deep-translator is optional; install only if translation is needed
+deep-translator

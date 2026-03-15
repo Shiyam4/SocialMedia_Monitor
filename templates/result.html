@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misinformation Result</title>
+
+    <!-- Correct Flask CSS Linking -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<main class="shell">
+    <header class="hero compact">
+        <span class="eyebrow">Analysis Result</span>
+        <h1 class="title">Credibility Snapshot</h1>
+        <p class="subtitle">Use this as a signal, then verify with trusted sources before sharing.</p>
+    </header>
+
+    <section class="panel">
+        <div class="result-header">
+            <h2 class="section-title">Result</h2>
+            <span class="badge {{ 'bad' if result == 'Misinformation' else 'good' }}">{{ result }}</span>
+        </div>
+        <p class="confidence">Category: <strong>{{ category }}</strong></p>
+
+        <div class="meter" aria-hidden="true">
+            <span class="fill" data-width="{{ confidence }}"></span>
+        </div>
+        <p class="confidence">Confidence score: {{ confidence }}%</p>
+
+        <div class="insight {{ 'bad' if result == 'Misinformation' else 'good' }}">
+            <h3>What this means</h3>
+            {% if result == 'Misinformation' %}
+            <p>This post shows patterns commonly seen in misleading content. Consider checking reliable outlets before sharing.</p>
+            {% else %}
+            <p>This post appears consistent with typical trustworthy content. Still double-check key claims and sources.</p>
+            {% endif %}
+        </div>
+
+        <div class="text-block">
+            <p class="label">Input text</p>
+            <blockquote>{{ original }}</blockquote>
+        </div>
+
+        {% if translated and translated != original %}
+        <div class="text-block">
+            <p class="label">Translated to English</p>
+            {% if detected_language and detected_language != 'en' %}
+            <p class="subnote">Source language: {{ source_language }}</p>
+            {% endif %}
+            <blockquote>{{ translated }}</blockquote>
+        </div>
+        {% endif %}
+
+        <div class="actions">
+            <a href="/" class="btn primary">Analyze Another Post</a>
+            <a href="/" class="btn ghost">Edit Input</a>
+            <button id="copyBtn" class="btn secondary" type="button">Copy Text</button>
+            <button id="shareBtn" class="btn ghost" type="button">Share</button>
+        </div>
+    </section>
+</main>
+
+<!-- store original text in hidden container so JS can access without Jinja syntax -->
+<div id="originalContainer" data-text="{{ original|e }}" style="display:none"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.meter .fill').forEach(function(el){
+        var w = el.getAttribute('data-width') || 0;
+        el.style.width = w + '%';
+    });
+
+    // copy/share functionality
+    // read the original text from the hidden container
+    var original = document.getElementById('originalContainer').dataset.text || '';
+    var copyBtn = document.getElementById('copyBtn');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', function(){
+            navigator.clipboard.writeText(original).then(function(){
+                alert('Text copied to clipboard');
+            });
+        });
+    }
+    var shareBtn = document.getElementById('shareBtn');
+    if (shareBtn) {
+        if (navigator.share) {
+            shareBtn.addEventListener('click', function(){
+                navigator.share({ text: original }).catch(function(){});
+            });
+        } else {
+            shareBtn.style.display = 'none';
+        }
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misinformation Detector</title>
+
+    <!-- Correct Flask CSS Linking -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<main class="shell">
+    <header class="hero">
+        <span class="eyebrow">Social Media Integrity</span>
+        <h1 class="title">Misinformation Detector</h1>
+        <p class="subtitle">Paste any public post and get a quick credibility signal. Designed for fast triage, not final judgment.</p>
+        <div class="chip-row">
+            <span class="chip">Instagram</span>
+            <span class="chip">WhatsApp</span>
+            <span class="chip">X / Twitter</span>
+            <span class="chip">Facebook</span>
+            <span class="chip">YouTube</span>
+        </div>
+    </header>
+
+    <section class="panel">
+        <form action="/predict" method="POST" id="analyzeForm">
+            <label for="post">Post text</label>
+            <textarea
+                id="post"
+                name="post"
+                placeholder="Paste the post text here. Include the headline and any key claims."
+                maxlength="2000"
+                required></textarea>
+
+            <div class="meta-row">
+                <span>We only analyze text. No images or links are stored.</span>
+                <span>Up to 2,000 characters.</span>
+            </div>
+
+            <button type="submit" class="btn primary">Analyze Post</button>
+        </form>
+
+        <div class="actions" style="margin-top:18px;">
+            <a href="/dashboard" class="btn secondary">View Dashboard</a>
+        </div>
+
+        <div class="tips">
+            <strong>Helpful tip</strong>
+            <p>Include the full claim and any quoted numbers. Short snippets can reduce accuracy.</p>
+        </div>
+    </section>
+
+    <div class="note">
+        <strong>Note:</strong> This tool highlights potential misinformation and should be used alongside trusted sources.
+    </div>
+</main>
+
+<div class="loading-overlay" id="loadingOverlay" aria-hidden="true">
+    <div class="loading-card" role="status" aria-live="polite">
+        <div class="spinner"></div>
+        <p>Analyzing your post...</p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var form = document.getElementById('analyzeForm');
+    var overlay = document.getElementById('loadingOverlay');
+    var textarea = document.getElementById('post');
+
+    // restore last text and keep it saved
+    if (textarea) {
+        textarea.value = localStorage.getItem('lastPost') || '';
+        textarea.addEventListener('input', function(){
+            localStorage.setItem('lastPost', textarea.value);
+        });
+    }
+
+    if (!form || !overlay) {
+        return;
+    }
+    form.addEventListener('submit', function(){
+        overlay.classList.add('visible');
+    });
+});
+</script>
+
+</body>
+</html>
