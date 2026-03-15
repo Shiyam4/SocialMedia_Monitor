@@ -7,3 +7,4 @@ nltk
 langdetect
 # deep-translator is optional; install only if translation is needed
 deep-translator
+gunicorn
