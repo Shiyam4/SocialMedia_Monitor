@@ -16,6 +16,7 @@
         <span class="eyebrow">Social Media Integrity</span>
         <h1 class="title">Misinformation Detector</h1>
         <p class="subtitle">Paste any public post and get a quick credibility signal. Designed for fast triage, not final judgment.</p>
+        <p class="user-banner">Signed in as <strong>{{ current_user.username }}</strong></p>
         <div class="chip-row">
             <span class="chip">Instagram</span>
             <span class="chip">WhatsApp</span>
@@ -45,6 +46,9 @@
 
         <div class="actions" style="margin-top:18px;">
             <a href="/dashboard" class="btn secondary">View Dashboard</a>
+            <form action="{{ url_for('logout') }}" method="post" class="inline-form">
+                <button type="submit" class="btn ghost">Switch User</button>
+            </form>
         </div>
 
         <div class="tips">

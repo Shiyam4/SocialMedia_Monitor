@@ -117,7 +117,24 @@ textarea {
     font-family: inherit;
 }
 
+input[type="text"] {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    font-size: 15px;
+    background: #fffdfb;
+    border: 1px solid rgba(26, 31, 43, 0.18);
+    outline: none;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+}
+
 textarea:focus {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 4px rgba(15, 185, 177, 0.2);
+}
+
+input[type="text"]:focus {
     border-color: var(--accent-2);
     box-shadow: 0 0 0 4px rgba(15, 185, 177, 0.2);
 }
@@ -179,6 +196,12 @@ textarea:focus {
     font-size: 14px;
     color: #7a2e1e;
     border: 1px solid rgba(255, 107, 74, 0.3);
+}
+
+.user-banner {
+    margin: 0;
+    font-size: 15px;
+    color: var(--muted);
 }
 
 .tips {
@@ -311,6 +334,10 @@ blockquote {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+}
+
+.inline-form {
+    display: inline-flex;
 }
 
 .loading-overlay {

@@ -1,24 +1,26 @@
-timestamp_utc,result,category,source_language,detected_language,confidence,template,translated
-2026-03-05T08:22:12.019052+00:00,Not Misinformation,Rumor,English,en,99.69,rbi announces changes to upi transactions,RBI announces changes to UPI transactions.
-2026-03-05T08:22:24.329847+00:00,Misinformation,Health,English,en,99.68,drinking turmeric milk cures all diseases instantly,Drinking turmeric milk cures all diseases instantly
-2026-03-06T04:30:16.695152+00:00,Not Misinformation,Rumor,English,en,99.92,new metro line launched between major cities,New metro line launched between major cities.
-2026-03-06T04:41:48.917135+00:00,Not Misinformation,Rumor,French,fr,99.81,new metro line inaugurated between major cities,New metro line inaugurated between major cities.
-2026-03-06T10:14:37.736433+00:00,Not Misinformation,Rumor,English,en,99.71,isro successfully tests solar propulsion,ISRO successfully tests solar propulsion.
-2026-03-06T10:14:55.102288+00:00,Not Misinformation,Rumor,English,en,99.89,electric vehicles adoption increases across regions,Electric vehicles adoption increases across regions
-2026-03-06T10:15:46.657223+00:00,Misinformation,Health,English,en,99.68,drinking turmeric milk cures all diseases instantly,Drinking turmeric milk cures all diseases instantly.
-2026-03-06T10:27:28.565923+00:00,Not Misinformation,Rumor,French,fr,99.67,isro successfully tests reusable rocket engine,ISRO successfully tests reusable rocket engine
-2026-03-06T10:29:27.427869+00:00,Not Misinformation,Rumor,Russian,ru,98.83,isro has successfully tested a reusable rocket engine,ISRO has successfully tested a reusable rocket engine.
-2026-03-07T08:44:47.910698+00:00,Misinformation,Rumor,Unknown,unknown,99.83,forward this message to get free recharge,Forward this message to get free recharge.
-2026-03-07T08:45:55.862125+00:00,Misinformation,Politics,Unknown,unknown,99.73,government will deposit <num> to all citizens tomorrow,Government will deposit ?5000 to all citizens tomorrow.
-2026-03-07T10:25:04.959400+00:00,Misinformation,Health,English,en,99.68,drinking turmeric milk cures all diseases instantly,Drinking turmeric milk cures all diseases instantly
-2026-03-10T01:47:54.258960+00:00,Misinformation,Rumor,English,en,99.66,nasa confirms sun will shut down,NASA confirms Sun will shut down.
-2026-03-10T01:48:25.863480+00:00,Misinformation,Health,RO,ro,99.70,garlic can cure cancer,garlic can cure cancer.
-2026-03-10T02:20:35.895652+00:00,Not Misinformation,Technology,English,en,98.55,google launches new ai tool for education,Google launches new AI tool for education
-2026-03-10T02:23:57.167766+00:00,Misinformation,Rumor,French,fr,59.05,test content,test content
-2026-03-10T02:25:07.540045+00:00,Not Misinformation,Technology,Unknown,unknown,98.55,google launches new ai tool for education,Google launches new AI tool for education
-2026-03-10T02:26:20.920144+00:00,Misinformation,Technology,Unknown,unknown,82.38,error <num> server error <num> that s an error there was an,Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
-2026-03-10T02:27:06.140900+00:00,Not Misinformation,Technology,Unknown,unknown,98.55,google launches new ai tool for education,Google launches new AI tool for education
-2026-03-10T02:32:07.862403+00:00,Not Misinformation,Technology,Unknown,unknown,98.55,google launches new ai tool for education,Google launches new AI tool for education
-2026-03-10T09:33:33.093050+00:00,Misinformation,Health,Unknown,unknown,99.70,garlic can cure cancer,Garlic can cure cancer.
-2026-03-10T09:39:02.367882+00:00,Misinformation,Health,Unknown,unknown,99.70,garlic can cure cancer,Garlic can cure cancer.
-2026-03-10T09:39:14.300692+00:00,Misinformation,Health,Unknown,unknown,99.70,garlic can cure cancer,Garlic can cure cancer.
+user_id,timestamp_utc,result,category,source_language,detected_language,confidence,template,translated
+,2026-03-05T08:22:12.019052+00:00,Not Misinformation,Rumor,English,en,99.69,rbi announces changes to upi transactions,RBI announces changes to UPI transactions.
+,2026-03-05T08:22:24.329847+00:00,Misinformation,Health,English,en,99.68,drinking turmeric milk cures all diseases instantly,Drinking turmeric milk cures all diseases instantly
+,2026-03-06T04:30:16.695152+00:00,Not Misinformation,Rumor,English,en,99.92,new metro line launched between major cities,New metro line launched between major cities.
+,2026-03-06T04:41:48.917135+00:00,Not Misinformation,Rumor,French,fr,99.81,new metro line inaugurated between major cities,New metro line inaugurated between major cities.
+,2026-03-06T10:14:37.736433+00:00,Not Misinformation,Rumor,English,en,99.71,isro successfully tests solar propulsion,ISRO successfully tests solar propulsion.
+,2026-03-06T10:14:55.102288+00:00,Not Misinformation,Rumor,English,en,99.89,electric vehicles adoption increases across regions,Electric vehicles adoption increases across regions
+,2026-03-06T10:15:46.657223+00:00,Misinformation,Health,English,en,99.68,drinking turmeric milk cures all diseases instantly,Drinking turmeric milk cures all diseases instantly.
+,2026-03-06T10:27:28.565923+00:00,Not Misinformation,Rumor,French,fr,99.67,isro successfully tests reusable rocket engine,ISRO successfully tests reusable rocket engine
+,2026-03-06T10:29:27.427869+00:00,Not Misinformation,Rumor,Russian,ru,98.83,isro has successfully tested a reusable rocket engine,ISRO has successfully tested a reusable rocket engine.
+,2026-03-07T08:44:47.910698+00:00,Misinformation,Rumor,Unknown,unknown,99.83,forward this message to get free recharge,Forward this message to get free recharge.
+,2026-03-07T08:45:55.862125+00:00,Misinformation,Politics,Unknown,unknown,99.73,government will deposit <num> to all citizens tomorrow,Government will deposit ?5000 to all citizens tomorrow.
+,2026-03-07T10:25:04.959400+00:00,Misinformation,Health,English,en,99.68,drinking turmeric milk cures all diseases instantly,Drinking turmeric milk cures all diseases instantly
+,2026-03-10T01:47:54.258960+00:00,Misinformation,Rumor,English,en,99.66,nasa confirms sun will shut down,NASA confirms Sun will shut down.
+,2026-03-10T01:48:25.863480+00:00,Misinformation,Health,RO,ro,99.70,garlic can cure cancer,garlic can cure cancer.
+,2026-03-10T02:20:35.895652+00:00,Not Misinformation,Technology,English,en,98.55,google launches new ai tool for education,Google launches new AI tool for education
+,2026-03-10T02:23:57.167766+00:00,Misinformation,Rumor,French,fr,59.05,test content,test content
+,2026-03-10T02:25:07.540045+00:00,Not Misinformation,Technology,Unknown,unknown,98.55,google launches new ai tool for education,Google launches new AI tool for education
+,2026-03-10T02:26:20.920144+00:00,Misinformation,Technology,Unknown,unknown,82.38,error <num> server error <num> that s an error there was an,Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+,2026-03-10T02:27:06.140900+00:00,Not Misinformation,Technology,Unknown,unknown,98.55,google launches new ai tool for education,Google launches new AI tool for education
+,2026-03-10T02:32:07.862403+00:00,Not Misinformation,Technology,Unknown,unknown,98.55,google launches new ai tool for education,Google launches new AI tool for education
+,2026-03-10T09:33:33.093050+00:00,Misinformation,Health,Unknown,unknown,99.70,garlic can cure cancer,Garlic can cure cancer.
+,2026-03-10T09:39:02.367882+00:00,Misinformation,Health,Unknown,unknown,99.70,garlic can cure cancer,Garlic can cure cancer.
+,2026-03-10T09:39:14.300692+00:00,Misinformation,Health,Unknown,unknown,99.70,garlic can cure cancer,Garlic can cure cancer.
+OBqfE7fn2jhTg3gzko_11A,2026-03-26T04:23:12.372100+00:00,Misinformation,Health,Spanish,es,99.70,garlic can cure cancer,Garlic can cure cancer.
+BAHJYVaVTWaTGp0NkYip2A,2026-03-26T04:44:18.043560+00:00,Not Misinformation,Technology,French,fr,98.55,google launches new ai tool for education,Google launches new AI tool for education

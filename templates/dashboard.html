@@ -92,8 +92,9 @@
 <main class="shell">
     <header class="hero compact">
         <span class="eyebrow">Monitoring Console</span>
-        <h1 class="title">Real-Time Dashboard</h1>
-        <p class="subtitle">Trending misinformation topics, scam templates, and language-wise spread from analyzed posts.</p>
+        <h1 class="title">Your Dashboard</h1>
+        <p class="subtitle">Your own analyzed posts, misinformation trends, scam templates, and language-wise spread.</p>
+        <p class="user-banner">Viewing data for <strong>{{ current_user.username }}</strong></p>
     </header>
 
     <section class="panel">
@@ -181,6 +182,9 @@
 
         <div class="actions">
             <a href="/" class="btn primary">Analyze New Post</a>
+            <form action="{{ url_for('logout') }}" method="post" class="inline-form">
+                <button type="submit" class="btn ghost">Switch User</button>
+            </form>
         </div>
     </section>
 </main>

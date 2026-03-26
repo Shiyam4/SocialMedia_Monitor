@@ -2,9 +2,10 @@ import csv
 import io
 import os
 import re
+import secrets
 from collections import Counter
 from datetime import datetime, timezone, timedelta
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response, session, redirect, url_for, flash
 
 import joblib
 
@@ -21,11 +22,14 @@ except ImportError:
     GoogleTranslator = None
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-change-me")
 
 # Load trained model
 model_path = os.path.join("model", "misinformation_model.pkl")
 EVENTS_PATH = os.path.join("analytics", "events.csv")
+USERS_PATH = os.path.join("analytics", "users.csv")
 EVENT_FIELDS = [
+    "user_id",
     "timestamp_utc",
     "result",
     "category",
@@ -35,6 +39,7 @@ EVENT_FIELDS = [
     "template",
     "translated",
 ]
+USER_FIELDS = ["user_id", "username", "created_at"]
 model = joblib.load(model_path)
 LANGUAGE_NAMES = {
     "en": "English",
@@ -123,6 +128,46 @@ def ensure_event_store() -> None:
         with open(EVENTS_PATH, "w", encoding="utf-8", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=EVENT_FIELDS)
             writer.writeheader()
+        return
+
+    with open(EVENTS_PATH, "r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        existing_fields = reader.fieldnames or []
+        if existing_fields == EVENT_FIELDS:
+            return
+        rows = list(reader)
+
+    normalized_rows = []
+    for row in rows:
+        normalized_rows.append({field: row.get(field, "") for field in EVENT_FIELDS})
+
+    with open(EVENTS_PATH, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=EVENT_FIELDS)
+        writer.writeheader()
+        writer.writerows(normalized_rows)
+
+
+def ensure_user_store() -> None:
+    os.makedirs(os.path.dirname(USERS_PATH), exist_ok=True)
+    if os.path.exists(USERS_PATH):
+        return
+    with open(USERS_PATH, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=USER_FIELDS)
+        writer.writeheader()
+
+
+def load_users() -> list:
+    ensure_user_store()
+    with open(USERS_PATH, "r", encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def save_users(rows: list) -> None:
+    ensure_user_store()
+    with open(USERS_PATH, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=USER_FIELDS)
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def log_event(row: dict) -> None:
@@ -133,10 +178,71 @@ def log_event(row: dict) -> None:
 
 
 def load_events() -> list:
+    ensure_event_store()
     if not os.path.exists(EVENTS_PATH):
         return []
     with open(EVENTS_PATH, "r", encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
+
+
+def normalize_username(username: str) -> str:
+    cleaned = re.sub(r"\s+", " ", (username or "").strip())
+    return cleaned[:50]
+
+
+def find_user_by_id(user_id: str):
+    if not user_id:
+        return None
+    for user in load_users():
+        if user.get("user_id") == user_id:
+            return user
+    return None
+
+
+def find_user_by_username(username: str):
+    target = normalize_username(username).casefold()
+    if not target:
+        return None
+    for user in load_users():
+        if normalize_username(user.get("username", "")).casefold() == target:
+            return user
+    return None
+
+
+def get_current_user():
+    user_id = session.get("user_id")
+    user = find_user_by_id(user_id)
+    if user is None:
+        session.pop("user_id", None)
+        session.pop("username", None)
+        return None
+    session["username"] = user.get("username", "")
+    session.permanent = True
+    return user
+
+
+def require_current_user():
+    user = get_current_user()
+    if user is None:
+        return None, redirect(url_for("login"))
+    return user, None
+
+
+def get_or_create_user(username: str) -> dict:
+    normalized = normalize_username(username)
+    existing = find_user_by_username(normalized)
+    if existing is not None:
+        return existing
+
+    user = {
+        "user_id": secrets.token_urlsafe(16),
+        "username": normalized,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    users = load_users()
+    users.append(user)
+    save_users(users)
+    return user
 
 
 def _parse_ts(ts: str):
@@ -181,10 +287,42 @@ def _apply_date_filter(rows, start=None, end=None):
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    user, redirect_response = require_current_user()
+    if redirect_response is not None:
+        return redirect_response
+    return render_template("index.html", current_user=user)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    current_user = get_current_user()
+    if request.method == "POST":
+        username = normalize_username(request.form.get("username", ""))
+        if len(username) < 2:
+            flash("Enter a name with at least 2 characters.")
+            return render_template("login.html", current_user=current_user, entered_username=username)
+
+        user = get_or_create_user(username)
+        session["user_id"] = user["user_id"]
+        session["username"] = user["username"]
+        session.permanent = True
+        return redirect(url_for("home"))
+
+    return render_template("login.html", current_user=current_user, entered_username="")
+
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.pop("user_id", None)
+    session.pop("username", None)
+    return redirect(url_for("login"))
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    user, redirect_response = require_current_user()
+    if redirect_response is not None:
+        return redirect_response
+    user_id = user["user_id"]
     text = request.form["post"]
 
     # 1. Detect language
@@ -215,6 +353,7 @@ def predict():
 
     log_event(
         {
+            "user_id": user_id,
             "timestamp_utc": datetime.now(timezone.utc).isoformat(),
             "result": result,
             "category": category,
@@ -228,6 +367,7 @@ def predict():
 
     return render_template(
         "result.html",
+        current_user=user,
         result=result,
         confidence=round(confidence, 2),
         category=category,
@@ -240,18 +380,23 @@ def predict():
 
 @app.route("/dashboard")
 def dashboard():
+    user, redirect_response = require_current_user()
+    if redirect_response is not None:
+        return redirect_response
 
     # allow optional ?start=YYYY-MM-DD&end=YYYY-MM-DD filters
     start = request.args.get("start")
     end = request.args.get("end")
 
-    rows = load_events()
+    user_id = user["user_id"]
+    rows = [r for r in load_events() if r.get("user_id") == user_id]
     rows = _apply_date_filter(rows, start, end)
     total = len(rows)
 
     if not rows:
         return render_template(
             "dashboard.html",
+            current_user=user,
             total=0,
             misinfo_total=0,
             misinfo_rate=0,
@@ -281,6 +426,7 @@ def dashboard():
 
     return render_template(
         "dashboard.html",
+        current_user=user,
         total=total,
         misinfo_total=misinfo_total,
         misinfo_rate=misinfo_rate,
@@ -293,10 +439,14 @@ def dashboard():
 
 @app.route("/export")
 def export():
+    user, redirect_response = require_current_user()
+    if redirect_response is not None:
+        return redirect_response
     fmt = request.args.get("format", "csv").lower()
     start = request.args.get("start")
     end = request.args.get("end")
-    rows = load_events()
+    user_id = user["user_id"]
+    rows = [r for r in load_events() if r.get("user_id") == user_id]
     rows = _apply_date_filter(rows, start, end)
     if fmt == "json":
         return jsonify(rows)

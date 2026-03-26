@@ -16,6 +16,7 @@
         <span class="eyebrow">Analysis Result</span>
         <h1 class="title">Credibility Snapshot</h1>
         <p class="subtitle">Use this as a signal, then verify with trusted sources before sharing.</p>
+        <p class="user-banner">Saved to <strong>{{ current_user.username }}</strong>'s dashboard</p>
     </header>
 
     <section class="panel">
@@ -56,6 +57,7 @@
 
         <div class="actions">
             <a href="/" class="btn primary">Analyze Another Post</a>
+            <a href="/dashboard" class="btn secondary">Open Dashboard</a>
             <a href="/" class="btn ghost">Edit Input</a>
             <button id="copyBtn" class="btn secondary" type="button">Copy Text</button>
             <button id="shareBtn" class="btn ghost" type="button">Share</button>
